@@ -14,6 +14,7 @@ import queryString from "query-string";
 import ReactPaginate from "react-paginate";
 import Pagination from "react-bootstrap/Pagination";
 import '../Components/css/Pagination.css';
+import AddProducts from './Products/AddProducts';
 
 
 
@@ -23,6 +24,8 @@ function Products() {
     let navigate = useNavigate();
     const [product, setProductData] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
+    const [add, setAdded] = useState([]);
+    const [update, setUpdate] = useState([]);
     let { search } = useLocation();
     let { page } = queryString.parse(search);
 
@@ -49,8 +52,7 @@ function Products() {
 
     const deletedata = () => {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Are you sure to delete Product?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -59,8 +61,8 @@ function Products() {
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire(
+                    'Product has been deleted successfully..',
                     'Deleted!',
-                    'Your file has been deleted.',
                     'success'
                 )
             }
@@ -87,7 +89,7 @@ function Products() {
                                     <ListGroup.Item> <strong> Category : </strong> {post.category.name}</ListGroup.Item>
                                 </ListGroup>
                                 <Card.Body>
-                                    <Button className="m-2" variant="primary" onClick={() => navigate(`/editproducts?id=${post.id}`)}>Update</Button>
+                                    <Button className="m-2" variant="primary" onClick={() => updateproducts(post.id)}>Update</Button>
                                     <Button className="mr-gap-2" variant="danger" onClick={() => deletedata()}>Delete</Button>
                                 </Card.Body>
                             </Card>
@@ -102,12 +104,96 @@ function Products() {
         navigate(`/products?offset=${selected + 1}&limit=${usersPerPage}`)
     };
 
+    const addproducts = async () => {
+        Swal.fire({
+            title: 'Add Product',
+            html: `<input type="text" id="title" class="swal2-input" placeholder="Title">
+                   <input type="number" id="price" class="swal2-input" placeholder="Price"> <input type="text" id="description" class="swal2-input" placeholder="Description"> <input type="number" id="categoryId" class="swal2-input" placeholder="categoryId">`,
+            confirmButtonText: 'Add Product',
+            focusConfirm: false,
+            preConfirm: () => {
+                const title = Swal.getPopup().querySelector('#title').value
+                const description = Swal.getPopup().querySelector('#description').value
+                const price = Swal.getPopup().querySelector('#price').value
+                const categoryId = Swal.getPopup().querySelector('#categoryId').value
+                if (!title || !price || !description || !categoryId) {
+                    Swal.showValidationMessage(`Please enter all Details`)
+                }
+                return { title: title, price: price, description: description, categoryId: categoryId }
+            }
+        }).then((result) => {
+            const url = `https://api.escuelajs.co/api/v1/products/`;
+            // console.log("obj", {
+            //     "title": title,
+            //     "price": parseInt(price),
+            //     "description": description,
+            //     "categoryId": parseInt(categoryId),
+            //     "images": [image]
+            // });
+            // return false
+            axios.post(url, {
+                "title": result.value.title,
+                "price": parseInt(result.value.price),
+                "description": result.value.description,
+                "categoryId": parseInt(result.value.categoryId),
+                "images": [result.value.image]
+            }).then((responce) => setAdded(responce.data))
+            Swal.fire(
+                'Product add successfully.',
+                'successfully!',
+                'success'
+            )
+            navigate('/products')
+
+            //             Swal.fire(`
+            //     Title: ${result.value.title}
+            //     Description: ${result.value.description}
+            //     Price: ${result.value.price}
+            //     Category: ${result.value.category}
+            //   `.trim())
+        })
+    }
+
+    const updateproducts = async (e) => {
+        Swal.fire({
+            title: 'Update Product',
+            html: `<input type="text" id="title" class="swal2-input" placeholder="Title">
+                    <input type="number" id="price" class="swal2-input" placeholder="Price">`,
+            confirmButtonText: 'Update Product',
+            focusConfirm: false,
+            preConfirm: () => {
+                const title = Swal.getPopup().querySelector('#title').value
+                const price = Swal.getPopup().querySelector('#price').value
+                if (!title || !price) {
+                    Swal.showValidationMessage(`Please enter all Details`)
+                }
+                return { title: title, price: price }
+            }
+        }).then((result) => {
+            const url = `https://api.escuelajs.co/api/v1/products/${e}`;
+            // console.log("obj", {
+            //     "title": title,
+            //     "price": parseInt(price)
+            // });
+            // return false
+            axios.put(url, {
+                "title": result.value.title,
+                "price": parseInt(result.value.price)
+            }).then((responce) => setUpdate(responce.data))
+            Swal.fire(
+                'Product Update successfully.',
+                'successfully!',
+                'success'
+            )
+        })
+    }
+
     return (
         <>
             <Template />
             <div className="my-container">
                 <input onChange={searchproducts} type="text" placeholder="Search..." />
-                <Button style={{ marginLeft: '85%', marginbottom: '10px' }} variant="secondary" onClick={() => navigate('/addproducts')}>Add Product</Button>
+                <Button style={{ marginLeft: '85%', marginbottom: '10px' }} variant="secondary" onClick={() => addproducts()}>Add Product</Button>
                 <Container className="mt-3">
                     <Row>
                         {/* {product.map(post =>

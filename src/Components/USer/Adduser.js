@@ -34,7 +34,7 @@ function Adduser() {
         }).then((responce) => setAdded(responce.data))
         Swal.fire(
             'successfully!',
-            'Categories add successfully.',
+            'user add successfully.',
             'success'
         )
         navigate('/')

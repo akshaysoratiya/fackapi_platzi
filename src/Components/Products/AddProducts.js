@@ -25,27 +25,27 @@ function AddProducts() {
 
     const addproducts = async () => {
         const url = `https://api.escuelajs.co/api/v1/products/`;
-        // console.log("obj", {
-        //     "title": title,
-        //     "price": parseInt(price),
-        //     "description": description,
-        //     "categoryId": parseInt(categoryId),
-        //     "images": [image]
-        // });
-        // return false
-        axios.post(url, {
+        console.log("obj", {
             "title": title,
             "price": parseInt(price),
             "description": description,
             "categoryId": parseInt(categoryId),
             "images": [image]
-        }).then((responce) => setAdded(responce.data))
-        Swal.fire(
-            'successfully!',
-            'Product add successfully.',
-            'success'
-        )
-        navigate('/products')
+        });
+        return false
+        // axios.post(url, {
+        //     "title": title,
+        //     "price": parseInt(price),
+        //     "description": description,
+        //     "categoryId": parseInt(categoryId),
+        //     "images": [image]
+        // }).then((responce) => setAdded(responce.data))
+        // Swal.fire(
+        //     'successfully!',
+        //     'Product add successfully.',
+        //     'success'
+        // )
+        // navigate('/products')
     };
     console.log(price);
 
