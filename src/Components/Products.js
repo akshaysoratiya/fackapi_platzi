@@ -27,7 +27,7 @@ function Products() {
     const [add, setAdded] = useState([]);
     const [update, setUpdate] = useState([]);
     let { search } = useLocation();
-    let { page } = queryString.parse(search);
+    let { offset } = queryString.parse(search);
 
     console.log("addd data", add);
     console.log("update data", update);
@@ -35,6 +35,7 @@ function Products() {
     const fetchAssets = async () => {
         const user = await axios.get('https://api.escuelajs.co/api/v1/products')
         setProductData(user.data);
+        setPageNumber(offset);
     }
     useEffect(() => {
         fetchAssets();
@@ -111,7 +112,9 @@ function Products() {
         Swal.fire({
             title: 'Add Product',
             html: `<input type="text" id="title" class="swal2-input" placeholder="Enter Title">
-                   <input type="number" id="price" class="swal2-input" placeholder="Enter Price"> <input type="text" id="description" class="swal2-input" placeholder="Enter Description"> <input type="number" id="categoryId" class="swal2-input" placeholder="Enter categoryId">`,
+                   <input type="number" id="price" class="swal2-input" placeholder="Enter Price">
+                   <input type="text" id="description" class="swal2-input" placeholder="Enter Description">
+                   <input type="number" id="categoryId" class="swal2-input" placeholder="Enter categoryId">`,
             confirmButtonText: 'Add Product',
             focusConfirm: false,
             preConfirm: () => {
@@ -224,7 +227,7 @@ function Products() {
                                 nextLinkClassName={"nextBttn"}
                                 disabledClassName={"paginationDisabled"}
                                 activeClassName={"paginationActive"}
-                                forcePage={page}
+                                forcePage={offset ? offset - 1 : 0}
                                 renderOnZeroPageCount={null}
                             //   className="cmn-Pagination mt-4"
                             //   breakLabel="..."

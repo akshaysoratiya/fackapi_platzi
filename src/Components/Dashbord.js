@@ -44,34 +44,26 @@ function Dashbord() {
                 <Container className="container-fluid">
                     <Row className="row">
                         <Col className="p-3">
-                            <Card style={{ width: '18rem' }}>
-                                <Card.Header>Users</Card.Header>
+                            <Card>
+                                <Card.Header as="h5">Users</Card.Header>
                                 <Card.Body>
-                                    <Card.Text>
-                                        {usercount}
-                                    </Card.Text>
+                                    <Card.Title> {usercount}</Card.Title>
                                 </Card.Body>
                             </Card>
                         </Col>
                         <Col className="p-3">
-                            <Card style={{ width: '18rem' }}>
-                                <Card.Header>Products</Card.Header>
+                            <Card>
+                                <Card.Header as="h5">Products</Card.Header>
                                 <Card.Body>
-                                    <Card.Text>
-                                        {productcount}
-                                    </Card.Text>
-
+                                    <Card.Title> {productcount}</Card.Title>
                                 </Card.Body>
                             </Card>
                         </Col>
                         <Col className="p-3">
-                            <Card style={{ width: '18rem' }}>
-                                <Card.Header>Categories</Card.Header>
+                            <Card>
+                                <Card.Header as="h5">Categories</Card.Header>
                                 <Card.Body>
-                                    <Card.Text>
-                                        {categoriescount}
-                                    </Card.Text>
-
+                                    <Card.Title> {categoriescount}</Card.Title>
                                 </Card.Body>
                             </Card>
                         </Col>
