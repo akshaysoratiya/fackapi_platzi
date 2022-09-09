@@ -41,67 +41,67 @@ function Categories() {
     fetchAssets();
   };
 
-  const addcategories = async () => {
-    Swal.fire({
-      title: 'Add Category',
-      html: `<input type="text" id="name" class="swal2-input" placeholder="Enter Name">
-             <input type="text" id="imgurl" class="swal2-input" placeholder="Enter ImageURL">`,
-      confirmButtonText: 'Add Category',
-      focusConfirm: false,
-      preConfirm: () => {
-        const name = Swal.getPopup().querySelector('#name').value
-        const imgurl = Swal.getPopup().querySelector('#imgurl').value
-        if (!name || !imgurl) {
-          Swal.showValidationMessage(`Please enter all Details`)
-        }
-        return { name: name, imgurl: imgurl }
-      }
-    }).then((result) => {
-      const url = `https://api.escuelajs.co/api/v1/categories/`;
-      // console.log("obj", {
-      //     "name": Name,
-      //     "images": [image]
-      // });
-      // return false
-      axios.post(url, {
-        "name": result.value.name,
-        "images": [result.value.imgurl]
-      }).then((responce) => setAdded(responce.data))
-      Swal.fire(
-        'Categories add successfully.',
-        'successfully!',
-        'success'
-      )
-      fetchAssets();
-    })
-  }
+  // const addcategories = async () => {
+  //   Swal.fire({
+  //     title: 'Add Category',
+  //     html: `<input type="text" id="name" class="swal2-input" placeholder="Enter Name">
+  //            <input type="text" id="imgurl" class="swal2-input" placeholder="Enter ImageURL">`,
+  //     confirmButtonText: 'Add Category',
+  //     focusConfirm: false,
+  //     preConfirm: () => {
+  //       const name = Swal.getPopup().querySelector('#name').value
+  //       const imgurl = Swal.getPopup().querySelector('#imgurl').value
+  //       if (!name || !imgurl) {
+  //         Swal.showValidationMessage(`Please enter all Details`)
+  //       }
+  //       return { name: name, imgurl: imgurl }
+  //     }
+  //   }).then((result) => {
+  //     const url = `https://api.escuelajs.co/api/v1/categories/`;
+  //     // console.log("obj", {
+  //     //     "name": Name,
+  //     //     "images": [image]
+  //     // });
+  //     // return false
+  //     axios.post(url, {
+  //       "name": result.value.name,
+  //       "images": [result.value.imgurl]
+  //     }).then((responce) => setAdded(responce.data))
+  //     Swal.fire(
+  //       'Categories add successfully.',
+  //       'successfully!',
+  //       'success'
+  //     )
+  //     fetchAssets();
+  //   })
+  // }
 
-  const updatecategories = async (id) => {
-    Swal.fire({
-      title: 'Update Category',
-      html: `<input type="text" id="name" class="swal2-input" placeholder="Enter Name">`,
-      confirmButtonText: 'Update Category',
-      focusConfirm: false,
-      preConfirm: () => {
-        const name = Swal.getPopup().querySelector('#name').value
-        if (!name) {
-          Swal.showValidationMessage(`Please enter name`)
-        }
-        return { name: name }
-      }
-    }).then((result) => {
-      const url = `https://api.escuelajs.co/api/v1/categories/${id}`;
-      axios.put(url, {
-        "name": result.value.name,
-      }).then((responce) => setUpdate(responce.data))
-      Swal.fire(
-        'Categories add successfully.',
-        'successfully!',
-        'success'
-      )
-    })
-    fetchAssets();
-  }
+  // const updatecategories = async (id) => {
+  //   Swal.fire({
+  //     title: 'Update Category',
+  //     html: `<input type="text" id="name" class="swal2-input" placeholder="Enter Name">`,
+  //     confirmButtonText: 'Update Category',
+  //     focusConfirm: false,
+  //     preConfirm: () => {
+  //       const name = Swal.getPopup().querySelector('#name').value
+  //       if (!name) {
+  //         Swal.showValidationMessage(`Please enter name`)
+  //       }
+  //       return { name: name }
+  //     }
+  //   }).then((result) => {
+  //     const url = `https://api.escuelajs.co/api/v1/categories/${id}`;
+  //     axios.put(url, {
+  //       "name": result.value.name,
+  //     }).then((responce) => setUpdate(responce.data))
+  //     Swal.fire(
+  //       'Categories add successfully.',
+  //       'successfully!',
+  //       'success'
+  //     )
+  //   })
+  //   fetchAssets();
+  // }
 
 
   const deletecategories = () => {
@@ -127,7 +127,8 @@ function Categories() {
       <Template />
       <div className="my-container">
         <input onChange={searchcategories} type="text" placeholder="Search..." />
-        <Button style={{ marginLeft: '85%', marginbottom: '10px' }} variant="secondary" onClick={() => addcategories()} >Add Categories</Button>
+        <Button style={{ marginLeft: '85%', marginbottom: '10px' }} variant="secondary" onClick={() => navigate('/managecategories')
+        } >Add Categories</Button>
         <Container className="mt-3">
           <Row>
             {categories.map(post =>
@@ -136,7 +137,7 @@ function Categories() {
                   <Card.Img variant="top" src={post.image} />
                   <Card.Body>
                     <Card.Title>{post.name}</Card.Title>
-                    <Button className="m-2" variant="primary" onClick={() => updatecategories(post.id)}>Update</Button>
+                    <Button className="m-2" variant="primary" onClick={() => navigate(`/managecategories?id=${post.id}`)}>Update</Button>
                     <Button className="mr-gap-2" variant="danger" onClick={() => deletecategories()}>Delete</Button>
                   </Card.Body>
                 </Card>

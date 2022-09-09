@@ -12,6 +12,8 @@ import EditProducts from './Components/Products/EditProducts';
 import AddCategories from './Components/Categories/AddCategories';
 import EditCategories from './Components/Categories/EditCategories';
 import Adduser from './Components/USer/Adduser';
+import ManageProducts from './Components/Products/ManageProducts';
+import ManageCategories from './Components/Categories/ManageCategories';
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
             <Route path="/addcategories" element={<AddCategories />} />
             <Route path="/editcategories" element={< EditCategories />} />
             <Route path="/adduser" element={< Adduser />} />
+            <Route path="/manageproducts" element={< ManageProducts />} />
+            <Route path="/managecategories" element={< ManageCategories />} />
           </Route>
           <Route path="/login" element={<Login />} />
         </Routes>
