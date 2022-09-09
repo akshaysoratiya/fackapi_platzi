@@ -20,6 +20,7 @@ function Categories() {
   const [update, setUpdate] = useState([]);
 
   console.log("addd data", add);
+  console.log("update data", update);
 
   const fetchAssets = async () => {
     const user = await axios.get('https://api.escuelajs.co/api/v1/categories')
@@ -43,8 +44,8 @@ function Categories() {
   const addcategories = async () => {
     Swal.fire({
       title: 'Add Category',
-      html: `<input type="text" id="name" class="swal2-input" placeholder="Name">
-             <input type="text" id="imgurl" class="swal2-input" placeholder="ImageURL">`,
+      html: `<input type="text" id="name" class="swal2-input" placeholder="Enter Name">
+             <input type="text" id="imgurl" class="swal2-input" placeholder="Enter ImageURL">`,
       confirmButtonText: 'Add Category',
       focusConfirm: false,
       preConfirm: () => {
@@ -71,13 +72,14 @@ function Categories() {
         'successfully!',
         'success'
       )
+      fetchAssets();
     })
   }
 
   const updatecategories = async (id) => {
     Swal.fire({
       title: 'Update Category',
-      html: `<input type="text" id="name" class="swal2-input" placeholder="Name">`,
+      html: `<input type="text" id="name" class="swal2-input" placeholder="Enter Name">`,
       confirmButtonText: 'Update Category',
       focusConfirm: false,
       preConfirm: () => {
@@ -98,6 +100,7 @@ function Categories() {
         'success'
       )
     })
+    fetchAssets();
   }
 
 

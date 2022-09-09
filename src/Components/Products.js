@@ -29,6 +29,9 @@ function Products() {
     let { search } = useLocation();
     let { page } = queryString.parse(search);
 
+    console.log("addd data", add);
+    console.log("update data", update);
+
     const fetchAssets = async () => {
         const user = await axios.get('https://api.escuelajs.co/api/v1/products')
         setProductData(user.data);
@@ -107,8 +110,8 @@ function Products() {
     const addproducts = async () => {
         Swal.fire({
             title: 'Add Product',
-            html: `<input type="text" id="title" class="swal2-input" placeholder="Title">
-                   <input type="number" id="price" class="swal2-input" placeholder="Price"> <input type="text" id="description" class="swal2-input" placeholder="Description"> <input type="number" id="categoryId" class="swal2-input" placeholder="categoryId">`,
+            html: `<input type="text" id="title" class="swal2-input" placeholder="Enter Title">
+                   <input type="number" id="price" class="swal2-input" placeholder="Enter Price"> <input type="text" id="description" class="swal2-input" placeholder="Enter Description"> <input type="number" id="categoryId" class="swal2-input" placeholder="Enter categoryId">`,
             confirmButtonText: 'Add Product',
             focusConfirm: false,
             preConfirm: () => {
@@ -143,22 +146,15 @@ function Products() {
                 'successfully!',
                 'success'
             )
-            navigate('/products')
-
-            //             Swal.fire(`
-            //     Title: ${result.value.title}
-            //     Description: ${result.value.description}
-            //     Price: ${result.value.price}
-            //     Category: ${result.value.category}
-            //   `.trim())
+            fetchAssets();
         })
     }
 
     const updateproducts = async (e) => {
         Swal.fire({
             title: 'Update Product',
-            html: `<input type="text" id="title" class="swal2-input" placeholder="Title">
-                    <input type="number" id="price" class="swal2-input" placeholder="Price">`,
+            html: `<input type="text" id="title" class="swal2-input" placeholder="Enter Title">
+                    <input type="number" id="price" class="swal2-input" placeholder="Enter Price">`,
             confirmButtonText: 'Update Product',
             focusConfirm: false,
             preConfirm: () => {
@@ -185,6 +181,7 @@ function Products() {
                 'successfully!',
                 'success'
             )
+            fetchAssets();
         })
     }
 
