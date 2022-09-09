@@ -18,7 +18,7 @@ function App() {
     <div>
       <Router>
         <Routes>
-          <Route element={<PrivateRoutes />}>
+          <Route exact element={<PrivateRoutes />}>
             <Route path="/" element={<Dashbord />} />
             <Route path="/users" element={<Users />} />
             <Route path="/products" element={<Products />} />

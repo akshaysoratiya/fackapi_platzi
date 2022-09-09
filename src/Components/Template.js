@@ -1,6 +1,6 @@
 import React from 'react'
 import Container from 'react-bootstrap/Container';
-import './Dashbord.css';
+import '../Components/css/Template.css';
 import Navbar from 'react-bootstrap/Navbar';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {

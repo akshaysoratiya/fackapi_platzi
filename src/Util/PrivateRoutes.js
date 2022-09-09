@@ -8,8 +8,7 @@ function PrivateRoutes() {
 
 
     useEffect(() => {
-        console.log("window.location", loginData, Object.keys(loginData).length === 0, window.location.pathname)
-        if (Object.keys(loginData).length === 0 && window.location.pathname !== 'login') {
+        if (loginData === null && loginData === undefined && window.location.pathname !== 'login') {
             <Navigate to='/login' />
         }
     }, [window.location.pathname, loginData])

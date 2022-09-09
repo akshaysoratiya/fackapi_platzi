@@ -18,6 +18,11 @@ function AddCategories() {
 
     const addCategories = async () => {
         const url = `https://api.escuelajs.co/api/v1/categories/`;
+        // console.log("obj", {
+        //     "name": Name,
+        //     "images": [image]
+        // });
+        // return false
         axios.post(url, {
             "name": Name,
             "images": [image]
@@ -40,11 +45,11 @@ function AddCategories() {
                         <Form>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control name="name" type="text" placeholder="Name" onChange={(e) => setName(e.target.value)} />
+                                <Form.Control name="name" type="text" placeholder="Name" onChange={(e) => { setName(e.target.value) }} />
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label>images URL</Form.Label>
-                                <Form.Control name="images" type="text" placeholder="images URl" onChange={(e) => setImage(e.target.value)} />
+                                <Form.Control name="images" type="text" placeholder="images URL" onChange={(e) => { setImage(e.target.value) }} />
                             </Form.Group>
                             <Button variant="primary" onClick={() => addCategories()}>
                                 Add Categories

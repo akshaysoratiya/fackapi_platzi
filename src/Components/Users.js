@@ -24,7 +24,7 @@ function Users() {
         <>
             <Template />
             <div className="my-container">
-                <Button style={{ marginLeft: '85%', marginbottom: '10px' }} variant="secondary" onClick={() => navigate('/addcategories')} >Add User</Button>
+                <Button style={{ marginLeft: '85%', marginbottom: '10px' }} variant="secondary" onClick={() => navigate('/adduser')} >Add User</Button>
                 <Container>
                     <Row>
                         {user.map(post =>

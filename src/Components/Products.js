@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Template from './Template';
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/esm/Container';
@@ -8,21 +8,44 @@ import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Swal from "sweetalert2";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { debounce } from 'debounce';
+import queryString from "query-string";
+import ReactPaginate from "react-paginate";
+import Pagination from "react-bootstrap/Pagination";
+import '../Components/css/Pagination.css';
+
+
 
 
 
 function Products() {
     let navigate = useNavigate();
     const [product, setProductData] = useState([]);
+    const [pageNumber, setPageNumber] = useState(0);
+    let { search } = useLocation();
+    let { page } = queryString.parse(search);
 
+    const fetchAssets = async () => {
+        const user = await axios.get('https://api.escuelajs.co/api/v1/products')
+        setProductData(user.data);
+    }
     useEffect(() => {
-        const fetchAssets = async () => {
-            const user = await axios.get('https://api.escuelajs.co/api/v1/products')
-            setProductData(user.data);
-        }
         fetchAssets();
     }, [])
+
+    const debouncedSave = useCallback(debounce((putdata) => setProductData(putdata), 800), [])
+
+    const searchproducts = (e) => {
+        const search = e.target.value;
+        const putdata = product.filter(
+            (iteams) =>
+                iteams.title.toLowerCase().includes(search) ||
+                iteams.category.name.toLowerCase().includes(search)
+        );
+        debouncedSave(putdata)
+        fetchAssets();
+    };
 
     const deletedata = () => {
         Swal.fire({
@@ -43,16 +66,51 @@ function Products() {
             }
         })
     };
-
+    //Pagination
+    const usersPerPage = 10;
+    const pagesVisited = pageNumber * usersPerPage;
+    const displayUsers = product
+        .slice(pagesVisited, pagesVisited + usersPerPage)
+        .map((post) => {
+            return (
+                <Col>
+                    <div className='my-4' >
+                        <Col>
+                            <Card style={{ width: '18rem' }}>
+                                <Card.Img variant="top" src={post.category.image} />
+                                <Card.Body>
+                                    <Card.Title> <strong> Title : </strong> {post.title}</Card.Title>
+                                    <Card.Text> <strong> Description : </strong> {post.description}</Card.Text>
+                                </Card.Body>
+                                <ListGroup className="list-group-flush">
+                                    <ListGroup.Item> <strong> Price :  </strong> {post.price}</ListGroup.Item>
+                                    <ListGroup.Item> <strong> Category : </strong> {post.category.name}</ListGroup.Item>
+                                </ListGroup>
+                                <Card.Body>
+                                    <Button className="m-2" variant="primary" onClick={() => navigate(`/editproducts?id=${post.id}`)}>Update</Button>
+                                    <Button className="mr-gap-2" variant="danger" onClick={() => deletedata()}>Delete</Button>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    </div>
+                </Col>
+            );
+        });
+    const pageCount = Math.ceil(product.length / usersPerPage);
+    const changePage = ({ selected }) => {
+        setPageNumber(selected + 1);
+        navigate(`/products?offset=${selected + 1}&limit=${usersPerPage}`)
+    };
 
     return (
         <>
             <Template />
             <div className="my-container">
+                <input onChange={searchproducts} type="text" placeholder="Search..." />
                 <Button style={{ marginLeft: '85%', marginbottom: '10px' }} variant="secondary" onClick={() => navigate('/addproducts')}>Add Product</Button>
                 <Container className="mt-3">
                     <Row>
-                        {product.map(post =>
+                        {/* {product.map(post =>
                             <Col>
                                 <Card style={{ width: '18rem' }}>
                                     <Card.Img variant="top" src={post.category.image} />
@@ -70,7 +128,32 @@ function Products() {
                                     </Card.Body>
                                 </Card>
                             </Col>
-                        )}
+                        )} */}
+                        {displayUsers}
+                        <Pagination>
+                            <ReactPaginate
+                                previousLabel={"Previous"}
+                                nextLabel={"Next"}
+                                pageCount={pageCount}
+                                onPageChange={changePage}
+                                containerClassName={"paginationBttns"}
+                                previousLinkClassName={"previousBttn"}
+                                nextLinkClassName={"nextBttn"}
+                                disabledClassName={"paginationDisabled"}
+                                activeClassName={"paginationActive"}
+                                forcePage={page}
+                                renderOnZeroPageCount={null}
+                            //   className="cmn-Pagination mt-4"
+                            //   breakLabel="..."
+                            //   nextLabel="next >"
+                            //   onPageChange={(e) => onPageClick('page', e)}
+                            //   pageRangeDisplayed={5}
+                            //   pageCount={state.total_pages?state.total_pages:0}
+                            //   previousLabel="< previous"
+                            //   renderOnZeroPageCount={null}
+                            //   forcePage={page}
+                            />
+                        </Pagination>
                     </Row>
                 </Container>
 
