@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,6 +9,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import queryString from 'query-string'
 import Swal from "sweetalert2";
 import { useForm } from 'react-hook-form';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
+import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
+
 
 
 
@@ -24,10 +29,19 @@ function ManageProducts() {
     const [image, setImage] = useState();
     const [add, setAdded] = useState([]);
     const [update, setUpdate] = useState([]);
+    const [categories, setCategories] = useState([]);
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [fetch, setFetch] = useState([]);
 
 
 
+    // useEffect(() => {
+    //     const fetchAssets = async () => {
+    //         const categories = await axios.get('https://api.escuelajs.co/api/v1/categories')
+    //         setCategories(categories.data);
+    //     }
+    //     fetchAssets();
+    // }, [])
 
     const addproducts = async () => {
         const url = `https://api.escuelajs.co/api/v1/products/`;
@@ -71,6 +85,13 @@ function ManageProducts() {
         )
         navigate('/products')
     };
+    useEffect(() => {
+        const fetchAssets = async () => {
+            const url = `https://api.escuelajs.co/api/v1/products/${id}`;
+            axios.put(url).then((responce) => setFetch(responce.data))
+        };
+        fetchAssets();
+    }, [])
     console.log(id);
     return (
         <div>
@@ -81,12 +102,12 @@ function ManageProducts() {
                         <Form onSubmit={handleSubmit(addproducts)}>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Title</Form.Label>
-                                <Form.Control name="title" type="text" placeholder="Title" {...register('title', { required: true })} onChange={(e) => setTitle(e.target.value)} />
+                                <Form.Control defaultValue={fetch.title} name="title" type="text" placeholder="Title" {...register('title', { required: true })} onChange={(e) => setTitle(e.target.value)} />
                                 {errors.title && <p className="text-danger">Title is required.</p>}
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label>Price</Form.Label>
-                                <Form.Control name="price" type="number" placeholder="Price" {...register('price', { required: true })} onChange={(e) => setPrice(e.target.value)} />
+                                <Form.Control defaultValue={fetch.price} name="price" type="number" placeholder="Price" {...register('price', { required: true })} onChange={(e) => setPrice(e.target.value)} />
                                 {errors.price && <p className="text-danger">Price is required.</p>}
                             </Form.Group>
                             {!id && <><Form.Group className="mb-3" controlId="formBasicPassword">
@@ -94,6 +115,7 @@ function ManageProducts() {
                                 <Form.Control name="description" type="text" placeholder="Description" {...register('description', { required: true })} onChange={(e) => setDescription(e.target.value)} />
                                 {errors.description && <p className="text-danger">Description is required.</p>}
                             </Form.Group>
+
                                 <Form.Group className="mb-3" controlId="formBasicPassword">
                                     <Form.Label>CategoryId</Form.Label>
                                     <Form.Control name="categoryId" type="number" placeholder="CategoryId" {...register('categoryId', { required: true })} onChange={(e) => setcacategoryId(e.target.value)} />

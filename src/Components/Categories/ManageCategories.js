@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -19,6 +19,8 @@ function ManageCategories() {
     const [Name, setName] = useState();
     const [image, setImage] = useState();
     const [add, setAdded] = useState([]);
+    const [fetch, setFetch] = useState([]);
+
 
     const addCategories = async () => {
         const url = `https://api.escuelajs.co/api/v1/categories/`;
@@ -68,6 +70,13 @@ function ManageCategories() {
         )
         navigate('/categories')
     };
+    useEffect(() => {
+        const fetchAssets = async () => {
+            const url = `https://api.escuelajs.co/api/v1/categories/${id}`;
+            axios.put(url).then((responce) => setFetch(responce.data))
+        };
+        fetchAssets();
+    }, [])
     return (
         <div>
             <Container className="p-4">
@@ -77,7 +86,7 @@ function ManageCategories() {
                         <Form>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control name="name" type="text" placeholder="Name" onChange={(e) => { setName(e.target.value) }} />
+                                <Form.Control defaultValue={fetch.name} name="name" type="text" placeholder="Name" onChange={(e) => { setName(e.target.value) }} />
                             </Form.Group>
                             {!id && <><Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label>images URL</Form.Label>
